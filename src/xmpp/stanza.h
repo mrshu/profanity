@@ -128,6 +128,7 @@
 #define STANZA_NS_CONFERENCE "jabber:x:conference"
 #define STANZA_NS_CAPTCHA "urn:xmpp:captcha"
 #define STANZA_NS_PUBSUB "http://jabber.org/protocol/pubsub"
+#define STANZA_NS_GMAIL "google:mail:notify"
 
 #define STANZA_DATAFORM_SOFTWARE "urn:xmpp:dataforms:softwareinfo"
 
@@ -215,5 +216,7 @@ xmpp_stanza_t * stanza_create_roster_remove_set(xmpp_ctx_t *ctx,
     const char * const barejid);
 
 char * stanza_get_error_message(xmpp_stanza_t * const stanza);
+
+xmpp_stanza_t * stanza_create_gmail_iq(xmpp_ctx_t *ctx);
 
 #endif

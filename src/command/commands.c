@@ -1882,6 +1882,14 @@ cmd_alias(gchar **args, struct cmd_help_t help)
 }
 
 gboolean
+cmd_gmail(gchar **args, struct cmd_help_t help)
+{
+    cons_show("Fetch Gmail");
+    iq_gmail_request();
+    return TRUE;
+}
+
+gboolean
 cmd_tiny(gchar **args, struct cmd_help_t help)
 {
     char *url = args[0];

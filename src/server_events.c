@@ -479,3 +479,15 @@ handle_autoping_cancel(void)
     cons_show_error("Server ping not supported, autoping disabled.");
     ui_current_page_off();
 }
+
+void
+handle_gmail_result(void)
+{
+    cons_debug("GOT GMAIL RESULT");
+}
+
+void
+handle_gmail_new(void)
+{
+    cons_debug("GOT GMAIL NEW");
+}

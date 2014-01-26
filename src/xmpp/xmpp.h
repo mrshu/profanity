@@ -127,6 +127,7 @@ void (*iq_room_list_request)(gchar *conferencejid);
 void (*iq_disco_info_request)(gchar *jid);
 void (*iq_disco_items_request)(gchar *jid);
 void (*iq_set_autoping)(int seconds);
+void (*iq_gmail_request)(void);
 
 // caps functions
 Capabilities* (*caps_get)(const char * const caps_str);

@@ -398,6 +398,14 @@ static struct cmd_t command_defs[] =
           "Example : /duck dennis ritchie",
           NULL } } },
 
+    { "/gmail",
+        cmd_gmail, parse_args, 0, 0, NULL,
+        { "/gmail", "Retrieve gmail.",
+        { "/gmail",
+          "------",
+          "Retrieve gmail.",
+          NULL } } },
+
     { "/who",
         cmd_who, parse_args, 0, 2, NULL,
         { "/who [status] [group]", "Show contacts/room participants with chosen status.",

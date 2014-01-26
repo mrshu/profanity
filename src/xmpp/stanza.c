@@ -362,6 +362,30 @@ stanza_create_disco_info_iq(xmpp_ctx_t *ctx, const char * const id, const char *
 }
 
 xmpp_stanza_t *
+stanza_create_gmail_iq(xmpp_ctx_t *ctx)
+{
+    xmpp_stanza_t *iq = xmpp_stanza_new(ctx);
+    xmpp_stanza_set_name(iq, STANZA_NAME_IQ);
+    xmpp_stanza_set_type(iq, STANZA_TYPE_GET);
+    
+    const char *fulljid = jabber_get_fulljid();
+    Jid *jidp = jid_create(fulljid);
+    xmpp_stanza_set_attribute(iq, STANZA_ATTR_TO, jidp->barejid);
+
+    char *id = generate_unique_id("gmail");
+    xmpp_stanza_set_id(iq, id);
+
+    xmpp_stanza_t *query = xmpp_stanza_new(ctx);
+    xmpp_stanza_set_name(query, STANZA_NAME_QUERY);
+    xmpp_stanza_set_ns(query, "google:mail:notify");
+
+    xmpp_stanza_add_child(iq, query);
+    xmpp_stanza_release(query);
+
+    return iq;
+}
+
+xmpp_stanza_t *
 stanza_create_disco_items_iq(xmpp_ctx_t *ctx, const char * const id,
     const char * const jid)
 {

@@ -78,8 +78,7 @@ void handle_autoping_cancel(void);
 void handle_gmail_result(void);
 void handle_gmail_new(void);
 
-void handle_recipient_not_found(const char * const recipient, const char * const err_msg);
-void handle_recipient_error(const char * const recipient, const char * const err_msg);
-void handle_error(const char * const err_msg);
+void handle_message_error(const char * const from, const char * const type,
+    const char * const err_msg);
 
 #endif

@@ -82,29 +82,31 @@ PKG_CHECK_MODULES([ncursesw], [ncursesw],
     [NCURSES_CFLAGS="$ncursesw_CFLAGS"; NCURSES_LIBS="$ncursesw_LIBS"; NCURSES="ncursesw"],
     [PKG_CHECK_MODULES([ncurses], [ncurses],
         [NCURSES_CFLAGS="$ncurses_CFLAGS"; NCURSES_LIBS="$ncurses_LIBS"; NCURSES="ncurses"],
-        [AC_CHECK_LIB([ncurses], [main], [],
+        [AC_CHECK_LIB([ncurses], [wget_wch], [NCURSES_CHECK_LIB="yes"],
             [AC_MSG_ERROR([ncurses is required for profanity])])])])
 AM_CPPFLAGS="$AM_CPPFLAGS $NCURSES_CFLAGS"
 LIBS="$LIBS $NCURSES_LIBS"
 
-### Check wide characters support in ncurses library
-CFLAGS_RESTORE="$CFLAGS"
-CFLAGS="$CFLAGS $NCURSES_CFLAGS"
-AC_CACHE_CHECK([for wget_wch support in $NCURSES], ncurses_cv_wget_wch,
-    [AC_LINK_IFELSE([AC_LANG_SOURCE([
-        #include <ncurses.h>
-        int main() {
-            (void)wget_wch(NULL, NULL);
-            return 0;
-        }
-        ])],
-        [ncurses_cv_wget_wch=yes],
-        [ncurses_cv_wget_wch=no])
-    ])
-CFLAGS="$CFLAGS_RESTORE"
+### Check wide characters support in ncurses library if found with PKG_CHECK_MODULES
+AS_IF([test "x$NCURSES_CHECK_LIB" != xyes], [
+    CFLAGS_RESTORE="$CFLAGS"
+    CFLAGS="$CFLAGS $NCURSES_CFLAGS"
+    AC_CACHE_CHECK([for wget_wch support in $NCURSES], ncurses_cv_wget_wch,
+        [AC_LINK_IFELSE([AC_LANG_SOURCE([
+            #include <ncurses.h>
+            int main() {
+                (void)wget_wch(NULL, NULL);
+                return 0;
+            }
+            ])],
+            [ncurses_cv_wget_wch=yes],
+            [ncurses_cv_wget_wch=no])
+        ])
+    CFLAGS="$CFLAGS_RESTORE"
 
-AS_IF([test "x$ncurses_cv_wget_wch" != xyes],
-    [AC_MSG_ERROR([ncurses does not support wide characters])])
+    AS_IF([test "x$ncurses_cv_wget_wch" != xyes],
+        [AC_MSG_ERROR([ncurses does not support wide characters])])
+])
 
 ### Check for other profanity dependencies
 PKG_CHECK_MODULES([glib], [glib-2.0 >= 2.26], [],
@@ -164,7 +166,6 @@ AC_SUBST(AM_CFLAGS)
 AC_SUBST(AM_CPPFLAGS)
 
 ### Checks for library functions.
-AC_FUNC_MALLOC
 AC_CHECK_FUNCS([atexit memset strdup strstr])
 
 AC_CONFIG_FILES([Makefile])

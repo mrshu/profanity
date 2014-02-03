@@ -2,7 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_INIT([profanity], [0.4.0], [boothj5web@gmail.com])
-PACKAGE_STATUS="development"
+
+### BREW_TODO should be "development" but make cannot find target .git/HEAD
+PACKAGE_STATUS="brew"
 
 ### Get git branch and revision if in development
 if test "x$PACKAGE_STATUS" = xdevelopment; then
@@ -86,24 +88,25 @@ PKG_CHECK_MODULES([ncursesw], [ncursesw],
 AM_CPPFLAGS="$AM_CPPFLAGS $NCURSES_CFLAGS"
 LIBS="$LIBS $NCURSES_LIBS"
 
+### BREW-TODO should still check for wget_wch on brew
 ### Check wide characters support in ncurses library if found with PKG_CHECK_MODULES
-CFLAGS_RESTORE="$CFLAGS"
-CFLAGS="$CFLAGS $NCURSES_CFLAGS"
-AC_CACHE_CHECK([for wget_wch support in $NCURSES], ncurses_cv_wget_wch,
-    [AC_LINK_IFELSE([AC_LANG_SOURCE([
-        #include <ncursesw/ncurses.h>
-        int main() {
-            (void)wget_wch(NULL, NULL);
-            return 0;
-        }
-        ])],
-        [ncurses_cv_wget_wch=yes],
-        [ncurses_cv_wget_wch=no])
-    ])
-CFLAGS="$CFLAGS_RESTORE"
-
-AS_IF([test "x$ncurses_cv_wget_wch" != xyes],
-    [AC_MSG_ERROR([ncurses does not support wide characters])])
+###CFLAGS_RESTORE="$CFLAGS"
+###CFLAGS="$CFLAGS $NCURSES_CFLAGS"
+###AC_CACHE_CHECK([for wget_wch support in $NCURSES], ncurses_cv_wget_wch,
+###    [AC_LINK_IFELSE([AC_LANG_SOURCE([
+###        #include <ncursesw/ncurses.h>
+###        int main() {
+###            (void)wget_wch(NULL, NULL);
+###            return 0;
+###        }
+###        ])],
+###        [ncurses_cv_wget_wch=yes],
+###        [ncurses_cv_wget_wch=no])
+###    ])
+###CFLAGS="$CFLAGS_RESTORE"
+###
+###AS_IF([test "x$ncurses_cv_wget_wch" != xyes],
+###    [AC_MSG_ERROR([ncurses does not support wide characters])])
 
 ### Check for other profanity dependencies
 PKG_CHECK_MODULES([glib], [glib-2.0 >= 2.26], [],
@@ -159,10 +162,15 @@ AS_IF([test "x$PACKAGE_STATUS" = xdevelopment],
 AM_CPPFLAGS="$AM_CPPFLAGS $glib_CFLAGS $curl_CFLAGS $libnotify_CFLAGS"
 LIBS="$LIBS $glib_LIBS $curl_LIBS $libnotify_LIBS"
 
+### BREW-TODO ncurses and curl not being linked
+LIBS="$LIBS -lncurses -lcurl"
+
 AC_SUBST(AM_CFLAGS)
 AC_SUBST(AM_CPPFLAGS)
 
 ### Checks for library functions.
+### BREW-TODO is it safe to remove this
+###AC_FUNC_MALLOC
 AC_CHECK_FUNCS([atexit memset strdup strstr])
 
 AC_CONFIG_FILES([Makefile])

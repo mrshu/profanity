@@ -1,5 +1,5 @@
 /*
- * otr.c
+ * otr3.c
  *
  * Copyright (C) 2012, 2013 James Booth <boothj5@gmail.com>
  *
@@ -40,7 +40,7 @@ static gboolean data_loaded;
 static OtrlPolicy
 cb_policy(void *opdata, ConnContext *context)
 {
-    return OTRL_POLICY_DEFAULT ;
+    return OTRL_POLICY_ALLOW_V1 | OTRL_POLICY_ALLOW_V2 ;
 }
 
 static int
@@ -98,6 +98,12 @@ static void
 cb_gone_secure(void *opdata, ConnContext *context)
 {
     ui_gone_secure(context->username, otr_is_trusted(context->username));
+}
+
+char *
+otr_libotr_version(void)
+{
+    return OTRL_VERSION;
 }
 
 void
